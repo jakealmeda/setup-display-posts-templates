@@ -40,3 +40,39 @@ function be_dps_template_part( $output, $original_atts ) {
 
 }
 add_action( 'display_posts_shortcode_output', 'be_dps_template_part', 10, 2 );
+
+
+// HANDLE IMAGES TO BE DISPLAYED
+if( !function_exists( 'setup_show_images' ) ) {
+    
+    function setup_show_images( $images, $pid ) {
+        
+        foreach( $images as $key => $value ) {
+            
+            /**
+             * $key    --> this is the field name
+             * $value  --> this is the image size
+             */
+            
+            if( $key == 'featured' ) {
+                
+                // featured image
+                $out .= get_the_post_thumbnail( $pid, $value );
+                
+            } else {
+                
+                // custom image
+                $out .= wp_get_attachment_image( get_post_meta( $pid, $key, TRUE ), $value );
+                
+            }
+            
+            // break if $out has content
+            if( $out ) break;
+            
+        }
+        
+        return $out;
+        
+    }
+    
+}
