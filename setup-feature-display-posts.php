@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Display Posts - Templates
+ * Plugin Name: Setup Feature Display Posts
  * Description: Simply adding Bill Erickson's <a href="https://www.billerickson.net/template-parts-with-display-posts-shortcode" target="_blank">code</a> for using Display Post plugin's layout feature.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Jake Almeda
  * Author URI: http://smarterwebpackages.com/
  * Network: true
