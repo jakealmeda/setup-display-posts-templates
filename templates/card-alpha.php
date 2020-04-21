@@ -30,6 +30,12 @@ if( $cat_id ) {
     echo '<div class="item category">NO CATEGORY</div>';
 }
 
+// CUSTOM | Display Featured Category If Available
+$feat_cat = get_post_meta( $pid, "featured_category", TRUE );
+if( get_term( $feat_cat )->name ) {
+    echo '<div class="item category featured">'.get_term( $feat_cat )->name.'</div>';
+}
+
 // TITLE | Native WP Title
 echo '<div class="item title"><a href="'.get_the_permalink( $pid ).'">'.get_the_title( $pid ).'</a></div>';
 
