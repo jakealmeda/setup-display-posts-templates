@@ -13,7 +13,20 @@ $pid = get_the_ID();
 
 
 // NATIVE | FEATURED IMAGE
-echo '<div class="item-pic"><a href="'.get_the_permalink( $pid ).'">'.get_the_post_thumbnail( $pid, 'thumbnail' ).'</a></div>';
+// SPECIFY IMAGES AND SIZES
+$ss_images = array(
+    'featured'      => 'thumbnail'
+);
+$img_atts = array(
+    'permalink'     => TRUE,        // options: true or false
+    'target'        => FALSE,       // options: false (the same as _self) or _blank
+);
+echo setup_show_images( $ss_images, $pid, $img_atts );
+/*$featured_image = get_the_post_thumbnail( $pid, 'thumbnail' );
+if( $featured_image ) {
+    echo '<div class="item-pic"><a href="'.get_the_permalink( $pid ).'">'.$featured_image.'</a></div>';
+}*/
+
 
 // CUSTOM | Podcast Category
 $cat_id = get_the_terms( $pid, "news_category" );
@@ -26,6 +39,7 @@ if( $cat_id ) {
     echo '<p>No Category selected</p>';
 }*/
 
+
 // NATIVE | TITLE
 echo '<div class="item-title"><a href="'.get_the_permalink( $pid ).'">'.get_the_title( $pid ).'</a></div>';
 
@@ -34,6 +48,13 @@ echo '<div class="item-title"><a href="'.get_the_permalink( $pid ).'">'.get_the_
 $author_id = get_post_field( 'post_author', $pid );
 //<img src="'.get_avatar_url( $author_id ).'" />
 echo '<div class="item-author">by <a href="'.get_author_posts_url( $author_id ).'">'.get_the_author_meta( 'display_name' , $author_id ).'</a></div>';
+
+
+// CUSTOM | Featured Category
+$feat_cat = get_post_meta( $pid, "featured_category", TRUE );
+if( get_term( $feat_cat )->name ) {
+    echo '<div class="item-feat-category"><strong>FEATURED CATEGORY:</strong> '.get_term( $feat_cat )->name.'</div>';
+}
 
 ?></div><?php
 
