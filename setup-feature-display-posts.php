@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Setup Feature Display Posts
  * Description: Simply adding Bill Erickson's <a href="https://www.billerickson.net/template-parts-with-display-posts-shortcode" target="_blank">code</a> for using Display Post plugin's layout feature.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Jake Almeda
  * Author URI: http://smarterwebpackages.com/
  * Network: true
@@ -44,7 +44,7 @@ add_action( 'display_posts_shortcode_output', 'be_dps_template_part', 10, 2 );
 // HANDLE IMAGES TO BE DISPLAYED
 if( !function_exists( 'setup_show_images' ) ) {
     
-    function setup_show_images( $images, $pid ) {
+    function setup_show_images( $images, $pid, $img_atts = FALSE ) {
         
         foreach( $images as $key => $value ) {
             
@@ -53,6 +53,7 @@ if( !function_exists( 'setup_show_images' ) ) {
              * $value  --> this is the image size
              */
             
+            // Check what image to display
             if( $key == 'featured' ) {
                 
                 // featured image
@@ -64,13 +65,32 @@ if( !function_exists( 'setup_show_images' ) ) {
                 $out .= wp_get_attachment_image( get_post_meta( $pid, $key, TRUE ), $value );
                 
             }
-            
+
             // break if $out has content
-            if( $out ) break;
+            if( $out ) {
+
+                // validate link
+                if( $img_atts[ 'permalink' ] ) {
+
+                    // determine where to open the link
+                    if( $img_atts[ 'target' ] )
+
+                    $out = '<a href="'.get_the_permalink( $pid ).'">'.$out.'</a>';
+
+                }                
+
+                // exit loop if an image is confirmed
+                break;
+            }
             
         }
         
-        return $out;
+        // validate if there's an image, else, show placeholder image
+        if( $out ) {
+            return $out;
+        } else {
+            return '<img src="'.get_stylesheet_directory_uri().'/assets/images/mock-featured.png" />';
+        }
         
     }
     
