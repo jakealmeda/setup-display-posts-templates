@@ -19,7 +19,7 @@ $ss_images = array(
 );
 echo setup_show_images( $ss_images, $pid );
 
-// CATEGORY Highlight - Highlights a single category selected
+// CATEGORY - Display "all" categories associated with the post
 $cat_id = get_the_terms( $pid, "category" );
 if( $cat_id ) {
     foreach( $cat_id as $cat_val ) {
