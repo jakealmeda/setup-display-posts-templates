@@ -11,43 +11,46 @@ $pid = get_the_ID();
 
 ?><div class="module card alpha"><?php
 
-// IMAGE - Specify Image Sizes
-$ss_images = array(
-    'featured'      => 'medium',
-    'item-pic'      => 'large',
-    'item-icon'     => 'thumbnail',
-);
-echo setup_show_images( $ss_images, $pid );
+    // IMAGE - Specify Image Sizes
+    $ss_images = array(
+        'featured'      => 'medium',
+        'item-pic'      => 'large',
+        'item-icon'     => 'thumbnail',
+    );
+    ?><div class="item image"><?php
+        echo setup_show_images( $ss_images, $pid );
+    ?></div><?php
 
-// CATEGORY - Display "all" categories associated with the post
-$cat_id = get_the_terms( $pid, "category" );
-if( $cat_id ) {
-    foreach( $cat_id as $cat_val ) {
-        $term = get_term( $cat_val );
-        echo '<div class="item category">'.$term->name.'</div>';
+    // CATEGORY - Display "all" categories associated with the post
+    $cat_id = get_the_terms( $pid, "category" );
+    if( $cat_id ) {
+        foreach( $cat_id as $cat_val ) {
+            $term = get_term( $cat_val );
+            echo '<div class="item category">'.$term->name.'</div>';
+        }
     }
-} else {
-    echo '<div class="item category">NO CATEGORY</div>';
-}
 
-// CUSTOM | Display Featured Category If Available
-$feat_cat = get_post_meta( $pid, "featured_category", TRUE );
-if( get_term( $feat_cat )->name ) {
-    echo '<div class="item category featured">'.get_term( $feat_cat )->name.'</div>';
-}
+    // CUSTOM | Display Featured Category If Available
+    $feat_cat = get_post_meta( $pid, "featured_category", TRUE );
+    if( get_term( $feat_cat )->name ) {
+        echo '<div class="item category featured">'.get_term( $feat_cat )->name.'</div>';
+    }
 
-// TITLE | Native WP Title
-echo '<div class="item title"><a href="'.get_the_permalink( $pid ).'">'.get_the_title( $pid ).'</a></div>';
+    // TITLE | Native WP Title
+    echo '<div class="item title"><a href="'.get_the_permalink( $pid ).'">'.get_the_title( $pid ).'</a></div>';
 
 
-// AUTHOR Text | Native WP Title
-$author_id = get_post_field( 'post_author', $pid );
-//<img src="'.get_avatar_url( $author_id ).'" />
-echo '<div class="item author">By <a href="'.get_author_posts_url( $author_id ).'">'.get_the_author_meta( 'display_name' , $author_id ).'</a></div>';
+    // AUTHOR Text | Native WP Title
+    $author_id = get_post_field( 'post_author', $pid );
+    //<img src="'.get_avatar_url( $author_id ).'" />
+    echo '<div class="item author">By <a href="'.get_author_posts_url( $author_id ).'">'.get_the_author_meta( 'display_name' , $author_id ).'</a></div>';
 
-// EXCERPT | Native WP Excerpt
-$max_words = 10;
-echo '<div class="item excerpt">'.wp_trim_words( get_the_excerpt( $pid ), $max_words ).'</div>';
+    // EXCERPT | Native WP Excerpt
+    $max_words = 10;
+    $the_excerpt = get_the_excerpt( $pid );
+    if( $the_excerpt ) {
+        echo '<div class="item excerpt">'.wp_trim_words( $the_excerpt, $max_words ).'</div>';
+    }
 
 ?></div><?php
 

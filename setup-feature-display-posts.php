@@ -52,17 +52,20 @@ if( !function_exists( 'setup_show_images' ) ) {
              * $key    --> this is the field name
              * $value  --> this is the image size
              */
+
+            // catch the image size before the break
+            $target_size = $value;
             
             // Check what image to display
             if( $key == 'featured' ) {
                 
                 // featured image
-                $out .= get_the_post_thumbnail( $pid, $value );
+                $out .= get_the_post_thumbnail( $pid, $target_size );
                 
             } else {
                 
                 // custom image
-                $out .= wp_get_attachment_image( get_post_meta( $pid, $key, TRUE ), $value );
+                $out .= wp_get_attachment_image( get_post_meta( $pid, $key, TRUE ), $target_size );
                 
             }
 
@@ -87,11 +90,84 @@ if( !function_exists( 'setup_show_images' ) ) {
         
         // validate if there's an image, else, show placeholder image
         if( $out ) {
+
             return $out;
+
         } else {
-            return '<img src="'.get_stylesheet_directory_uri().'/assets/images/mock-featured.png" />';
+
+            //return '<img src="'.get_stylesheet_directory_uri().'/assets/images/mock-featured.png" />';
+            $spit_image = setup_pull_default_image( 'mock-featured', $target_size );
+
+            if( $spit_image ) {
+
+                return $spit_image;
+
+            } else {
+
+                // show how to upload the required image
+                return '<p>Please download the default image from <a href="https://setup-be.basestructure.com/wp-content/themes/setup-be/assets/images/mock-featured.png" target="_blank">here</a> and follow the steps below:</p>
+                        <p><ol>
+                            <li>Login to WP-Admin</li>
+                            <li>Click MEDIA</li>
+                            <li>Click ADD NEW</li>
+                            <li>Select or drag and drop the image(s) to the specified location</li>
+                        </ol></p>
+                        <p><img src="https://jakealmeda.com/images/upload-images-wordpres-media-library.gif" /></p>';
+
+            }
+
         }
         
+    }
+    
+}
+
+
+// PULL DEFAULT IMAGE
+if( !function_exists( 'setup_pull_default_image' ) ) {
+
+    function setup_pull_default_image( $filename, $size = FALSE ) {
+
+        if( !$size )
+            $size = 'thumbnail';
+
+        $args = array(
+            'post_type'      => 'attachment',
+            'post_mime_type' => 'image',
+            'post_status'    => 'inherit',
+            'posts_per_page' => - 1,
+        );
+
+        $query_images = new WP_Query( $args );
+
+        $images = array();
+        foreach ( $query_images->posts as $image ) {
+            
+            if( $image->post_title == $filename ) {
+                
+                return wp_get_attachment_image( $image->ID, $size );
+                
+                break;
+                
+            }
+            
+        }
+
+        setup_starter_reset_query();
+
+    }
+
+}
+
+
+// RESET QUERIES
+if( !function_exists( 'setup_starter_reset_query' ) ) {
+    
+    function setup_starter_reset_query() {
+
+        wp_reset_query();
+        wp_reset_postdata();
+
     }
     
 }

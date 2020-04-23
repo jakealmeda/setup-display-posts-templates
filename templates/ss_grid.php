@@ -15,7 +15,7 @@ $pid = get_the_ID();
 // NATIVE | FEATURED IMAGE
 // SPECIFY IMAGES AND SIZES
 $ss_images = array(
-    'featured'      => 'thumbnail'
+    'featured'      => 'thumbnail',
 );
 $img_atts = array(
     'permalink'     => TRUE,        // options: true or false
