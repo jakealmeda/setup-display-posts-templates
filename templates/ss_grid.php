@@ -32,12 +32,15 @@ if( $featured_image ) {
 $cat_id = get_the_terms( $pid, "news_category" );
 if( $cat_id ) {
     foreach( $cat_id as $cat_val ) {
+
         $term = get_term( $cat_val );
-        echo '<div class="item-category">'.$term->name.'</div>';
+
+        echo '<div class="item-category">
+                <a href="'.get_category_link( $term->term_id ).'">'.$term->name.'</a>
+            </div>';
+
     }
-}/* else {
-    echo '<p>No Category selected</p>';
-}*/
+}
 
 
 // NATIVE | TITLE
@@ -51,9 +54,14 @@ echo '<div class="item-author">by <a href="'.get_author_posts_url( $author_id ).
 
 
 // CUSTOM | Featured Category
-$feat_cat = get_post_meta( $pid, "featured_category", TRUE );
-if( get_term( $feat_cat )->name ) {
-    echo '<div class="item-feat-category"><strong>FEATURED CATEGORY:</strong> '.get_term( $feat_cat )->name.'</div>';
+$feat_cat = get_term( get_post_meta( $pid, "featured_category", TRUE ) );
+if( $feat_cat->name ) {
+
+    echo '<div class="item-feat-category">
+            <strong>FEATURED CATEGORY:</strong> 
+            <a href="'.get_category_link( $feat_cat->term_id ).'">'.$feat_cat->name.'</a>
+        </div>';
+
 }
 
 ?></div><?php
