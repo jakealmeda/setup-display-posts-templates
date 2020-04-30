@@ -46,6 +46,8 @@ if( !function_exists( 'setup_show_images' ) ) {
     
     function setup_show_images( $images, $pid, $img_atts = FALSE ) {
         
+        $out = ''; // declare a blank variable for AWS
+
         foreach( $images as $key => $value ) {
             
             /**
